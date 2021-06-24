@@ -1073,7 +1073,15 @@
                 ]
               }
             }
-        }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "akLaOHoBWhZGWo4Bcjsa",
+          "_score" : 10.414593,
+          "_source" : {
+        "traceID":"69b078d4416e9719","spanID":"69b078d4416e9719","flags":1,"operationName":"process-ctle","references":[],"startTime":1624460708997855,"startTimeMillis":1624460708997,"duration":3516,"tags":[{"key":"ctle-status","type":"string","value":"U"},{"key":"ctle-id","type":"int64","value":"22539656827"},{"key":"sampler.type","type":"string","value":"const"},{"key":"sampler.param","type":"bool","value":"true"},{"key":"object-class","type":"string","value":"com.ottogroup.buying.sharedkernel.item.itemeffort.ItemEffort"},{"key":"object-id","type":"int64","value":"168637894"},{"key":"internal.span.format","type":"string","value":"proto"}],"logs":[],"process":{"serviceName":"collector-mercado-worker","tags":[{"key":"hostname","type":"string","value":"ce166b4be2f6"},{"key":"jaeger.version","type":"string","value":"Java-1.6.0"},{"key":"ip","type":"string","value":"10.0.1.64"}]}}
+          }
       ]
     }
   }

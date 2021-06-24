@@ -21,8 +21,11 @@ func main() {
 	fmt.Println("Analysing Tracing Records from ElasticSearch...")
 
 	// Get Hits
-	// spansRecord := createSpanRecordFromJSON("spans.json")
-	hits, _ := getHits("test")
+	/*
+		spansRecord := createSpanRecordFromJSON("spans.json")
+		hits := spansRecord.getHits()
+	*/
+	hits, _ := getHits("test", 20)
 
 	// Log some data
 	hitsCountAsString := strconv.FormatInt(int64(len(hits)), 10)
@@ -35,21 +38,19 @@ func main() {
 		log.Println("Service/Operation: " + serviceName + "/" + operationName + "(" + startTime + ")" + " ID: " + hit.Id)
 	}
 
-	/*
-		ends := findEndOfTraces("spans.json")
-		for i := 0; i < len(ends); i++ {
-			end := ends[i]
-			start, err := findStartOfTrace("spans.json", end.getTraceId())
-			if err != nil {
-				log.Println("ERROR")
-			}
-			log.Println("END: " + timeToStringInSeconds(end.getStartTimeMillis()))
-			log.Println("START: " + timeToStringInSeconds(start.getStartTimeMillis()))
-			timeDiff := end.getStartTimeMillis() - start.getStartTimeMillis()
-			log.Println("TOOK: " + timeToStringInSeconds(timeDiff) + " sec")
-			log.Println("TOOK: " + timeToStringInMinutes(timeDiff) + " min")
+	ends := findEndOfTraces("spans.json")
+	for i := 0; i < len(ends); i++ {
+		end := ends[i]
+		start, err := findStartOfTrace("spans.json", end.getTraceId())
+		if err != nil {
+			log.Println(err.Error())
 		}
-	*/
+		log.Println("END: " + timeToStringInSeconds(end.getStartTimeMillis()))
+		log.Println("START: " + timeToStringInSeconds(start.getStartTimeMillis()))
+		timeDiff := end.getStartTimeMillis() - start.getStartTimeMillis()
+		log.Println("TOOK: " + timeToStringInSeconds(timeDiff) + " sec")
+		log.Println("TOOK: " + timeToStringInMinutes(timeDiff) + " min")
+	}
 
 }
 
@@ -57,8 +58,9 @@ func main() {
 var es_url = "localhost:9200"
 
 // ElasticSearch Helper functions
-func getHits(index string) ([]Hit, error) {
-	query := "http://" + es_url + "/" + index + "/_search"
+func getHits(index string, size int) ([]Hit, error) {
+	sizeAsString := strconv.FormatInt(int64(size), 10)
+	query := "http://" + es_url + "/" + index + "/_search" + "?size=" + sizeAsString
 	resp, err := http.Get(query)
 	if err != nil {
 		log.Println("ERROR: " + err.Error())
@@ -124,7 +126,8 @@ func findStartOfTrace(path string, traceID string) (Hit, error) {
 		}
 	}
 	if len(starts) != 1 {
-		return startHit, &errorString{"Wrong number found"}
+		lenghtAsString := strconv.FormatInt(int64(len(starts)), 10)
+		return startHit, &errorString{"Wrong number Start-Traces found: " + lenghtAsString + ", instead of 1"}
 	} else {
 		startHit := starts[0]
 		return startHit, nil
