@@ -1,0 +1,1079 @@
+{
+    "took" : 7,
+    "timed_out" : false,
+    "_shards" : {
+      "total" : 5,
+      "successful" : 5,
+      "skipped" : 0,
+      "failed" : 0
+    },
+    "hits" : {
+      "total" : {
+        "value" : 63,
+        "relation" : "eq"
+      },
+      "max_score" : 8.347568,
+      "hits" : [
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "x0L5OHoBWhZGWo4Bcjsa",
+          "_score" : 8.347568,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "5509a963119ef3dd",
+            "flags" : 1,
+            "operationName" : "command-created",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "19b078d4416e9719"
+              }
+            ],
+            "startTime" : 1624453509003085,
+            "startTimeMillis" : 1624453509003,
+            "duration" : 9,
+            "tags" : [
+              {
+                "key" : "cmd-events-generation",
+                "type" : "bool",
+                "value" : "true"
+              },
+              {
+                "key" : "cmd-id",
+                "type" : "string",
+                "value" : "5779d035-ab5e-4019-b79f-e53093af82e7"
+              },
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "cmd-type",
+                "type" : "string",
+                "value" : "DeleteObsoleteChildrenCommand"
+              },
+              {
+                "key" : "entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050*item_communicationKey_681200049*itemEffort_communicationKey_1374135542"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [ ],
+            "process" : {
+              "serviceName" : "collector-mercado-worker",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ce166b4be2f6"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.0.1.64"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "C1f5OHoBc9oLtdAriYdl",
+          "_score" : 8.347568,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "93771f9d45241371",
+            "flags" : 1,
+            "operationName" : "planned-process-new-entity",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "926be77833f8f097"
+              }
+            ],
+            "startTime" : 1624453515500341,
+            "startTimeMillis" : 1624453515500,
+            "duration" : 41,
+            "tags" : [
+              {
+                "key" : "cmd-id",
+                "type" : "string",
+                "value" : "167fac91-eaab-4fbe-9915-9c619e50a826"
+              },
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "cmd-type",
+                "type" : "string",
+                "value" : "SaveAttributeCommand"
+              },
+              {
+                "key" : "entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050*item_communicationKey_681200049*itemEffort_communicationKey_1374135542"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [ ],
+            "process" : {
+              "serviceName" : "commandprocessor",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ip-10-10-6-14.eu-central-1.compute.internal"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.10.6.14"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "DVf5OHoBc9oLtdAriYdl",
+          "_score" : 8.347568,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "9ac8ae734175d6c1",
+            "flags" : 1,
+            "operationName" : "planned-save-attribute",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "42ff4cca374f7938"
+              }
+            ],
+            "startTime" : 1624453515502194,
+            "startTimeMillis" : 1624453515502,
+            "duration" : 28,
+            "tags" : [
+              {
+                "key" : "cmd-id",
+                "type" : "string",
+                "value" : "62788eff-b47f-4916-b878-0025a567c5af"
+              },
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "cmd-type",
+                "type" : "string",
+                "value" : "SaveAttributeCommand"
+              },
+              {
+                "key" : "entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050*item_communicationKey_681200049*itemEffort_communicationKey_1374135542"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [
+              {
+                "timestamp" : 1624453515502221,
+                "fields" : [
+                  {
+                    "key" : "event",
+                    "type" : "string",
+                    "value" : "Bind attribute de.otto.mercado.MerchandiseStyle_communicationKey_681200050*item_communicationKey_681200049*itemEffort_communicationKey_1374135542*processableFrom with value AttributeVal(2002-02-20T00:00:00+01:00[Europe/Berlin])"
+                  }
+                ]
+              }
+            ],
+            "process" : {
+              "serviceName" : "commandprocessor",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ip-10-10-6-14.eu-central-1.compute.internal"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.10.6.14"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "EFf5OHoBc9oLtdAriYdl",
+          "_score" : 8.347568,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "79c9044fd21144eb",
+            "flags" : 1,
+            "operationName" : "planned-save-attribute",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "b6cf61f60387d6ca"
+              }
+            ],
+            "startTime" : 1624453515502313,
+            "startTimeMillis" : 1624453515502,
+            "duration" : 21,
+            "tags" : [
+              {
+                "key" : "cmd-id",
+                "type" : "string",
+                "value" : "cce7556f-c537-4978-8113-9204b7956572"
+              },
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "cmd-type",
+                "type" : "string",
+                "value" : "SaveAttributeCommand"
+              },
+              {
+                "key" : "entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050*item_communicationKey_681200049*itemEffort_communicationKey_1374135542"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [
+              {
+                "timestamp" : 1624453515502333,
+                "fields" : [
+                  {
+                    "key" : "event",
+                    "type" : "string",
+                    "value" : "Bind attribute de.otto.mercado.MerchandiseStyle_communicationKey_681200050*item_communicationKey_681200049*itemEffort_communicationKey_1374135542*promotionSeason with value AttributeVal(144)"
+                  }
+                ]
+              }
+            ],
+            "process" : {
+              "serviceName" : "commandprocessor",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ip-10-10-6-14.eu-central-1.compute.internal"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.10.6.14"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "EVf5OHoBc9oLtdAriYdl",
+          "_score" : 8.347568,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "773d44cf02bf8ea7",
+            "flags" : 1,
+            "operationName" : "planned-delete-obsolete-children",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "7e9b695de90fa396"
+              }
+            ],
+            "startTime" : 1624453515502349,
+            "startTimeMillis" : 1624453515502,
+            "duration" : 31,
+            "tags" : [
+              {
+                "key" : "cmd-id",
+                "type" : "string",
+                "value" : "8e5558e3-545e-412e-bdd8-434c54f4950d"
+              },
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "cmd-type",
+                "type" : "string",
+                "value" : "DeleteObsoleteChildrenCommand"
+              },
+              {
+                "key" : "entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050*item_communicationKey_681200049*itemEffort_communicationKey_1374135542"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [
+              {
+                "timestamp" : 1624453515502366,
+                "fields" : [
+                  {
+                    "key" : "event",
+                    "type" : "string",
+                    "value" : "Lookin' for children"
+                  }
+                ]
+              }
+            ],
+            "process" : {
+              "serviceName" : "commandprocessor",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ip-10-10-6-14.eu-central-1.compute.internal"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.10.6.14"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "E1f5OHoBc9oLtdAriYdl",
+          "_score" : 8.347568,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "4dce6bbc680f4e23",
+            "flags" : 1,
+            "operationName" : "planned-delete-obsolete-children",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "97eb2d0ae3809c53"
+              }
+            ],
+            "startTime" : 1624453515505783,
+            "startTimeMillis" : 1624453515505,
+            "duration" : 26,
+            "tags" : [
+              {
+                "key" : "cmd-id",
+                "type" : "string",
+                "value" : "5acc5f71-83f5-4ce4-a4e3-91c0f20611a6"
+              },
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "cmd-type",
+                "type" : "string",
+                "value" : "DeleteObsoleteChildrenCommand"
+              },
+              {
+                "key" : "entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050*item_communicationKey_681200049*itemEffort_communicationKey_1374135542"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [
+              {
+                "timestamp" : 1624453515505797,
+                "fields" : [
+                  {
+                    "key" : "event",
+                    "type" : "string",
+                    "value" : "Lookin' for children"
+                  }
+                ]
+              }
+            ],
+            "process" : {
+              "serviceName" : "commandprocessor",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ip-10-10-6-14.eu-central-1.compute.internal"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.10.6.14"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "GVf5OHoBc9oLtdAriYdl",
+          "_score" : 8.347568,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "b70af17d614a1284",
+            "flags" : 1,
+            "operationName" : "planned-delete-obsolete-children",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "21a6e66fdf9e0b5d"
+              }
+            ],
+            "startTime" : 1624453515513605,
+            "startTimeMillis" : 1624453515513,
+            "duration" : 28,
+            "tags" : [
+              {
+                "key" : "cmd-id",
+                "type" : "string",
+                "value" : "36ddf929-4f3b-44f4-accf-0e273f7e1507"
+              },
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "cmd-type",
+                "type" : "string",
+                "value" : "DeleteObsoleteChildrenCommand"
+              },
+              {
+                "key" : "entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050*item_communicationKey_681200049*itemEffort_communicationKey_1374135542"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [
+              {
+                "timestamp" : 1624453515513619,
+                "fields" : [
+                  {
+                    "key" : "event",
+                    "type" : "string",
+                    "value" : "Lookin' for children"
+                  }
+                ]
+              }
+            ],
+            "process" : {
+              "serviceName" : "commandprocessor",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ip-10-10-6-14.eu-central-1.compute.internal"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.10.6.14"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "HVf5OHoBc9oLtdAriYdl",
+          "_score" : 8.347568,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "a608eca7398ddc85",
+            "flags" : 1,
+            "operationName" : "planned-delete-obsolete-children",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "13996f9e6e4ba384"
+              }
+            ],
+            "startTime" : 1624453515516052,
+            "startTimeMillis" : 1624453515516,
+            "duration" : 34,
+            "tags" : [
+              {
+                "key" : "cmd-id",
+                "type" : "string",
+                "value" : "2dcfedfc-6c71-4e06-bf45-1747e9fb57f9"
+              },
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "cmd-type",
+                "type" : "string",
+                "value" : "DeleteObsoleteChildrenCommand"
+              },
+              {
+                "key" : "entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050*item_communicationKey_681200049*itemEffort_communicationKey_1374135542"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [
+              {
+                "timestamp" : 1624453515516068,
+                "fields" : [
+                  {
+                    "key" : "event",
+                    "type" : "string",
+                    "value" : "Lookin' for children"
+                  }
+                ]
+              }
+            ],
+            "process" : {
+              "serviceName" : "commandprocessor",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ip-10-10-6-14.eu-central-1.compute.internal"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.10.6.14"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "IkIBOXoBWhZGWo4Bc0nw",
+          "_score" : 8.347568,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "3e0d6a34492f58e4",
+            "flags" : 1,
+            "operationName" : "skip-change",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "19b96c6a29a51f10"
+              }
+            ],
+            "startTime" : 1624454034167043,
+            "startTimeMillis" : 1624454034167,
+            "duration" : 15,
+            "tags" : [
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "client",
+                "type" : "string",
+                "value" : "lascana"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [ ],
+            "process" : {
+              "serviceName" : "objectserver",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ip-10-10-6-187.eu-central-1.compute.internal"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.10.6.187"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "k1cBOXoBc9oLtdArd4vY",
+          "_score" : 8.347568,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "ef748b21bb5e0654",
+            "flags" : 1,
+            "operationName" : "skip-change",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "5f5eb2d5d4a131cc"
+              }
+            ],
+            "startTime" : 1624454034651097,
+            "startTimeMillis" : 1624454034651,
+            "duration" : 21,
+            "tags" : [
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "client",
+                "type" : "string",
+                "value" : "unigro"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [ ],
+            "process" : {
+              "serviceName" : "objectserver",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ip-10-10-6-187.eu-central-1.compute.internal"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.10.6.187"
+                }
+              ]
+            }
+          }
+        },
+        {
+            "_index" : "jaeger-span-2021-06-23",
+            "_type" : "_doc",
+            "_id" : "FkIBOXoBWhZGWo4Bc0nw",
+            "_score" : 10.383586,
+            "_source" : {
+              "traceID" : "19b078d4416e9719",
+              "spanID" : "38fb9b9cdb9536bf",
+              "flags" : 1,
+              "operationName" : "rpr-received",
+              "references" : [
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "c085ed0120cea350"
+                }
+              ],
+              "startTime" : 1624454033532337,
+              "startTimeMillis" : 1624454033532,
+              "duration" : 10,
+              "tags" : [
+                {
+                  "key" : "root-entity",
+                  "type" : "string",
+                  "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+                },
+                {
+                  "key" : "client",
+                  "type" : "string",
+                  "value" : "witt"
+                },
+                {
+                  "key" : "internal.span.format",
+                  "type" : "string",
+                  "value" : "proto"
+                }
+              ],
+              "logs" : [ ],
+              "process" : {
+                "serviceName" : "objectserver",
+                "tags" : [
+                  {
+                    "key" : "hostname",
+                    "type" : "string",
+                    "value" : "ip-10-10-6-187.eu-central-1.compute.internal"
+                  },
+                  {
+                    "key" : "jaeger.version",
+                    "type" : "string",
+                    "value" : "Java-1.6.0"
+                  },
+                  {
+                    "key" : "ip",
+                    "type" : "string",
+                    "value" : "10.10.6.187"
+                  }
+                ]
+              }
+            }
+        },
+        {
+          "_index" : "jaeger-span-2021-06-23",
+          "_type" : "_doc",
+          "_id" : "j1cBOXoBc9oLtdArd4vY",
+          "_score" : 10.30036,
+          "_source" : {
+            "traceID" : "19b078d4416e9719",
+            "spanID" : "892ba5362b46b1bb",
+            "flags" : 1,
+            "operationName" : "write-to-mongo",
+            "references" : [
+              {
+                "refType" : "FOLLOWS_FROM",
+                "traceID" : "19b078d4416e9719",
+                "spanID" : "c0389b498a8cc036"
+              }
+            ],
+            "startTime" : 1624454034488921,
+            "startTimeMillis" : 1624454034488,
+            "duration" : 18,
+            "tags" : [
+              {
+                "key" : "root-entity",
+                "type" : "string",
+                "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+              },
+              {
+                "key" : "client",
+                "type" : "string",
+                "value" : "witt"
+              },
+              {
+                "key" : "internal.span.format",
+                "type" : "string",
+                "value" : "proto"
+              }
+            ],
+            "logs" : [ ],
+            "process" : {
+              "serviceName" : "changeprocessor",
+              "tags" : [
+                {
+                  "key" : "hostname",
+                  "type" : "string",
+                  "value" : "ip-10-10-5-107.eu-central-1.compute.internal"
+                },
+                {
+                  "key" : "jaeger.version",
+                  "type" : "string",
+                  "value" : "Java-1.6.0"
+                },
+                {
+                  "key" : "ip",
+                  "type" : "string",
+                  "value" : "10.10.5.107"
+                }
+              ]
+            }
+          }
+        },
+        {
+            "_index" : "jaeger-span-2021-06-23",
+            "_type" : "_doc",
+            "_id" : "CyP6OHoBe1cVblIEACoj",
+            "_score" : 10.421646,
+            "_source" : {
+              "traceID" : "19b078d4416e9719",
+              "spanID" : "c085ed0120cea350",
+              "flags" : 1,
+              "operationName" : "rpr-created",
+              "references" : [
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "f08785c18c910899"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "4e5c30c0db8fe3bb"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "878af8732a545953"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "29a493b129920d62"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "18d3f8a99cd42c86"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "c367f3ffce4e4ee0"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "fb961010ddf47045"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "91b14c8265d3df12"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "91c5963c575b1e28"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "a53d8ed0b1d7a05a"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "e5065096d02886ea"
+                },
+                {
+                  "refType" : "FOLLOWS_FROM",
+                  "traceID" : "19b078d4416e9719",
+                  "spanID" : "b2cc45638a48cd84"
+                }
+              ],
+              "startTime" : 1624453545917762,
+              "startTimeMillis" : 1624453545917,
+              "duration" : 41,
+              "tags" : [
+                {
+                  "key" : "root-entity",
+                  "type" : "string",
+                  "value" : "de.otto.mercado.MerchandiseStyle_communicationKey_681200050"
+                },
+                {
+                  "key" : "evt-types",
+                  "type" : "string",
+                  "value" : "EntityCreatedEvent,AttributeCreatedEvent"
+                },
+                {
+                  "key" : "internal.span.format",
+                  "type" : "string",
+                  "value" : "proto"
+                }
+              ],
+              "logs" : [ ],
+              "process" : {
+                "serviceName" : "eventprocessor",
+                "tags" : [
+                  {
+                    "key" : "hostname",
+                    "type" : "string",
+                    "value" : "ip-10-10-5-222.eu-central-1.compute.internal"
+                  },
+                  {
+                    "key" : "jaeger.version",
+                    "type" : "string",
+                    "value" : "Java-1.6.0"
+                  },
+                  {
+                    "key" : "ip",
+                    "type" : "string",
+                    "value" : "10.10.5.222"
+                  }
+                ]
+              }
+            }
+        },
+        {
+            "_index" : "jaeger-span-2021-06-23",
+            "_type" : "_doc",
+            "_id" : "2kL5OHoBWhZGWo4Bcjsa",
+            "_score" : 10.414592,
+            "_source" : {
+              "traceID" : "19b078d4416e9719",
+              "spanID" : "19b078d4416e9719",
+              "flags" : 1,
+              "operationName" : "process-ctle",
+              "references" : [ ],
+              "startTime" : 1624453508997855,
+              "startTimeMillis" : 1624453508997,
+              "duration" : 3516,
+              "tags" : [
+                {
+                  "key" : "ctle-status",
+                  "type" : "string",
+                  "value" : "U"
+                },
+                {
+                  "key" : "ctle-id",
+                  "type" : "int64",
+                  "value" : "22539656827"
+                },
+                {
+                  "key" : "sampler.type",
+                  "type" : "string",
+                  "value" : "const"
+                },
+                {
+                  "key" : "sampler.param",
+                  "type" : "bool",
+                  "value" : "true"
+                },
+                {
+                  "key" : "object-class",
+                  "type" : "string",
+                  "value" : "com.ottogroup.buying.sharedkernel.item.itemeffort.ItemEffort"
+                },
+                {
+                  "key" : "object-id",
+                  "type" : "int64",
+                  "value" : "168637894"
+                },
+                {
+                  "key" : "internal.span.format",
+                  "type" : "string",
+                  "value" : "proto"
+                }
+              ],
+              "logs" : [ ],
+              "process" : {
+                "serviceName" : "collector-mercado-worker",
+                "tags" : [
+                  {
+                    "key" : "hostname",
+                    "type" : "string",
+                    "value" : "ce166b4be2f6"
+                  },
+                  {
+                    "key" : "jaeger.version",
+                    "type" : "string",
+                    "value" : "Java-1.6.0"
+                  },
+                  {
+                    "key" : "ip",
+                    "type" : "string",
+                    "value" : "10.0.1.64"
+                  }
+                ]
+              }
+            }
+        }
+      ]
+    }
+  }
