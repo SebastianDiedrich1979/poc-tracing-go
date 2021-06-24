@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -20,8 +21,8 @@ func main() {
 	fmt.Println("Analysing Tracing Records from ElasticSearch...")
 
 	// Get Hits
-	spansRecord := createSpanRecordFromJSON("spans.json")
-	hits := spansRecord.getHits()
+	// spansRecord := createSpanRecordFromJSON("spans.json")
+	hits, _ := getHits("test")
 
 	// Log some data
 	hitsCountAsString := strconv.FormatInt(int64(len(hits)), 10)
@@ -31,23 +32,48 @@ func main() {
 		serviceName := hit.getServiceName()
 		operationName := hit.getOperationName()
 		startTime := hit.getStartTimeAsLocalTime()
-		log.Println("Service/Operation: " + serviceName + "/" + operationName + "(" + startTime + ")")
+		log.Println("Service/Operation: " + serviceName + "/" + operationName + "(" + startTime + ")" + " ID: " + hit.Id)
 	}
 
-	ends := findEndOfTraces("spans.json")
-	for i := 0; i < len(ends); i++ {
-		end := ends[i]
-		start, err := findStartOfTrace("spans.json", end.getTraceId())
-		if err != nil {
-			log.Println("ERROR")
+	/*
+		ends := findEndOfTraces("spans.json")
+		for i := 0; i < len(ends); i++ {
+			end := ends[i]
+			start, err := findStartOfTrace("spans.json", end.getTraceId())
+			if err != nil {
+				log.Println("ERROR")
+			}
+			log.Println("END: " + timeToStringInSeconds(end.getStartTimeMillis()))
+			log.Println("START: " + timeToStringInSeconds(start.getStartTimeMillis()))
+			timeDiff := end.getStartTimeMillis() - start.getStartTimeMillis()
+			log.Println("TOOK: " + timeToStringInSeconds(timeDiff) + " sec")
+			log.Println("TOOK: " + timeToStringInMinutes(timeDiff) + " min")
 		}
-		log.Println("END: " + timeToStringInSeconds(end.getStartTimeMillis()))
-		log.Println("START: " + timeToStringInSeconds(start.getStartTimeMillis()))
-		timeDiff := end.getStartTimeMillis() - start.getStartTimeMillis()
-		log.Println("TOOK: " + timeToStringInSeconds(timeDiff) + " sec")
-		log.Println("TOOK: " + timeToStringInMinutes(timeDiff) + " min")
+	*/
+
+}
+
+// ElasticSearch
+var es_url = "localhost:9200"
+
+// ElasticSearch Helper functions
+func getHits(index string) ([]Hit, error) {
+	query := "http://" + es_url + "/" + index + "/_search"
+	resp, err := http.Get(query)
+	if err != nil {
+		log.Println("ERROR: " + err.Error())
+		return make([]Hit, 0), err
 	}
 
+	var spansRecord SpansRecord
+	bodyBytes, _err := ioutil.ReadAll(resp.Body)
+	if _err != nil {
+		log.Println("ERROR: " + _err.Error())
+		return make([]Hit, 0), _err
+	}
+	json.Unmarshal(bodyBytes, &spansRecord)
+
+	return spansRecord.getHits(), nil
 }
 
 func findEndOfTraces(path string) []Hit {
