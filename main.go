@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -8,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -20,23 +22,15 @@ END: "write-to-mongo" (Service: changeprocessor)
 func main() {
 	fmt.Println("Analysing Tracing Records from ElasticSearch...")
 
-	// Get Hits
-	/*
-		spansRecord := createSpanRecordFromJSON("spans.json")
-		hits := spansRecord.getHits()
-	*/
-	hits, _ := getHits("test", 20)
+	// Getting Entries of an Index
+	fmt.Println("Hits from today...")
 
-	// Log some data
+	indexToday()
+	hits, _ := queryAll("test")
 	hitsCountAsString := strconv.FormatInt(int64(len(hits)), 10)
 	log.Println("Hit Count: " + hitsCountAsString)
-	for i := 0; i < len(hits); i++ {
-		hit := hits[i]
-		serviceName := hit.getServiceName()
-		operationName := hit.getOperationName()
-		startTime := hit.getStartTimeAsLocalTime()
-		log.Println("Service/Operation: " + serviceName + "/" + operationName + "(" + startTime + ")" + " ID: " + hit.Id)
-	}
+
+	// TODO: remove all spans.json dependencies
 
 	ends := findEndOfTraces("spans.json")
 	for i := 0; i < len(ends); i++ {
@@ -52,20 +46,68 @@ func main() {
 		log.Println("TOOK: " + timeToStringInMinutes(timeDiff) + " min")
 	}
 
+	// 1624431600000, 1624464000000
+	from := "1624431600000"
+	to := "1624464000000"
+	hits2, _ := query("test", "collector-mercado-worker", "process-ctle", from, to, "desc", 10)
+	//hits, _ := query("test", "changeprocessor", "write-to-mongo", from, to, "desc", 1)
+	hitsCountAsString2 := strconv.FormatInt(int64(len(hits2)), 10)
+	log.Println("Hit Count: " + hitsCountAsString2)
+	for i := 0; i < len(hits2); i++ {
+		hit := hits2[i]
+		serviceName := hit.getServiceName()
+		operationName := hit.getOperationName()
+		startTime := hit.getStartTimeAsLocalTime()
+		log.Println("Service/Operation: " + serviceName + "/" + operationName + "(" + startTime + ")" + " ID: " + hit.Id)
+	}
+
 }
 
 // ElasticSearch
-var es_url = "localhost:9200"
+var es_url = "http://localhost:9200" // via ubuntu server elastic search installation (login needed)
 
 // ElasticSearch Helper functions
-func getHits(index string, size int) ([]Hit, error) {
-	sizeAsString := strconv.FormatInt(int64(size), 10)
-	query := "http://" + es_url + "/" + index + "/_search" + "?size=" + sizeAsString
-	resp, err := http.Get(query)
+func queryAll(index string) ([]Hit, error) {
+
+	query := es_url + "/" + index + "/_search?size=10000"
+
+	req, err := http.NewRequest("GET", query, nil)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
-		log.Println("ERROR: " + err.Error())
-		return make([]Hit, 0), err
+		panic(err)
 	}
+	defer resp.Body.Close()
+
+	var spansRecord SpansRecord
+	bodyBytes, _err := ioutil.ReadAll(resp.Body)
+	if _err != nil {
+		log.Println("ERROR: " + _err.Error())
+		return make([]Hit, 0), _err
+	}
+	json.Unmarshal(bodyBytes, &spansRecord)
+
+	return spansRecord.getHits(), nil
+}
+
+func query(index string, serviceName string, operationName string, from string, to string, sort string, size int) ([]Hit, error) {
+
+	query := es_url + "/" + index + "/_search"
+
+	bodyString := createBodyWithRange(serviceName, operationName, from, to, sort, size)
+	var body = []byte(bodyString)
+
+	req, err := http.NewRequest("GET", query, bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
 
 	var spansRecord SpansRecord
 	bodyBytes, _err := ioutil.ReadAll(resp.Body)
@@ -91,7 +133,94 @@ func findEndOfTraces(path string) []Hit {
 	return ends
 }
 
-// helper
+///////////
+// helper//
+///////////
+
+// Index Today
+func indexToday() {
+	now := time.Now()
+	yearAsString := strconv.Itoa(now.Year())
+	var monthAsString string
+	if now.Month() < 10 {
+		monthAsString = "0" + strconv.Itoa(int(now.Month()))
+	} else {
+		monthAsString = strconv.Itoa(int(now.Month()))
+	}
+	dayAsString := strconv.Itoa(now.Day())
+	fmt.Println("INDEX: " + "jaeger-span-" + yearAsString + "-" + monthAsString + "-" + dayAsString)
+}
+
+// Body Builder for GET Requests
+func createBodyWithRange(serviceName string, operationName string, from string, to string, sort string, size int) string {
+	sizeAsString := strconv.FormatInt(int64(size), 10)
+
+	if size > 10000 {
+		log.Println("[WARN]: Size is bigger than 10,000 - size will be set to 10,000")
+		sizeAsString = "10000"
+	}
+
+	var jsonString = `{
+		"from": 0,
+		"size": ` + sizeAsString + `,
+		"query": {
+			"bool": {
+				"must": [
+					{
+						"match_phrase": {
+							"process.serviceName": "` + serviceName + `"
+						}
+					},
+					{
+						"match_phrase": {
+							"operationName": "` + operationName + `"
+						}
+					},
+					{
+						"range": {
+							"startTimeMillis": {
+								"gte": ` + from + `,
+								"lte": ` + to + `
+							}
+						}
+					}
+				]
+			}
+		},
+		"sort": [
+			{
+				"startTimeMillis": "` + sort + `"
+			}
+		]
+	}`
+	strings.Replace(jsonString, "$size", sizeAsString, 1)
+	strings.Replace(jsonString, "$serviceName", serviceName, 1)
+	strings.Replace(jsonString, "$operationName", operationName, 1)
+	strings.Replace(jsonString, "$from", from, 1)
+	strings.Replace(jsonString, "$to", to, 1)
+	bodyString := strings.Replace(jsonString, "$sort", sort, 1)
+	//fmt.Println("BODY: " + bodyString)
+
+	return bodyString
+}
+
+// RFC3339 timestamp in milliseconds (unix time) - e.g: "2021-06-14T09:58:16+02:00" => 1623657496000
+func timeStampInMilliSeconds(rfc3339t string) string {
+
+	t, err := time.Parse(time.RFC3339, rfc3339t)
+	if err != nil {
+		panic(err)
+	}
+
+	// convert into unix time
+	loc, _ := time.LoadLocation("Europe/Berlin")
+	fmt.Println("TimeStamp: " + t.In(loc).String())
+
+	ut := t.UnixNano() / int64(time.Millisecond)
+	utAsString := strconv.FormatInt(int64(ut), 10)
+	return utAsString
+}
+
 func timeToStringInSeconds(milliSecs int64) string {
 	secs := milliSecs / 1000
 	numberAsString := strconv.FormatInt(int64(secs), 10)
