@@ -49,7 +49,10 @@ func main() {
 				log.Println("ERROR: " + err.Error())
 			} else {
 				timeDiff := end.getStartTimeMillis() - start.getStartTimeMillis()
-				log.Println("TOOK: " + timeToStringInSeconds(timeDiff) + " sec " + "(" + timeToStringInMinutes(timeDiff) + " min" + ")")
+				seconds := timeToStringInSeconds(timeDiff)
+				minutes := timeToStringInMinutes(timeDiff)
+				traceID := start.getTraceId()
+				fmt.Println(" --- TOOK: " + seconds + " sec " + "(" + minutes + " min" + ") - TraceID: " + traceID)
 			}
 		}
 		fmt.Println("")
