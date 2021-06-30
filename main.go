@@ -20,51 +20,80 @@ END: "write-to-mongo" (Service: changeprocessor)
 */
 
 func main() {
+
+	// Constants
+	// oneDayInMilliSeconds := 86400000
+
 	fmt.Println("Analysing Tracing Records from ElasticSearch...")
+
+	// Get chunks of 1 hour from 0-24 h
+	tc := todayChunks()
+	lenAsString := strconv.FormatInt(int64(len(tc)), 10)
+	fmt.Println("TC: " + lenAsString)
+
+	for i := 0; i < 24; i++ {
+		from := strconv.FormatInt(int64(tc[i]), 10)
+		to := strconv.FormatInt(int64(tc[i+1]-1), 10) // -1 => otherwise it will be found twice
+		hits, _ := query("test", "changeprocessor", "write-to-mongo", from, to, "desc", 1000)
+		//hits, _ := query("test", "eventprocessor", "rpr-created", from, to, "desc", 1000)
+		hitsCountAsString := strconv.FormatInt(int64(len(hits)), 10)
+
+		indexAsString := strconv.FormatInt(int64(i), 10)
+		log.Println("Index " + indexAsString + "-> Hit Count: " + hitsCountAsString)
+	}
 
 	// Getting Entries of an Index
 	fmt.Println("Hits from today...")
 
 	indexToday()
-	hits, _ := queryAll("test")
-	hitsCountAsString := strconv.FormatInt(int64(len(hits)), 10)
-	log.Println("Hit Count: " + hitsCountAsString)
+
+	/*
+		hits, _ := queryAll("test")
+		hitsCountAsString := strconv.FormatInt(int64(len(hits)), 10)
+		log.Println("Hits found: " + hitsCountAsString)
+		for _, hit := range hits {
+			log.Println("HIT: " + hit.getOperationName() + ", Service: " + hit.getServiceName() + "(" + hit.getStartTimeAsLocalTime() + ")")
+		}
+	*/
 
 	// TODO: remove all spans.json dependencies
 
-	ends := findEndOfTraces("spans.json")
-	for i := 0; i < len(ends); i++ {
-		end := ends[i]
-		start, err := findStartOfTrace("spans.json", end.getTraceId())
-		if err != nil {
-			log.Println(err.Error())
+	/*
+		ends := findEndOfTraces("spans.json")
+		for i := 0; i < len(ends); i++ {
+			end := ends[i]
+			start, err := findStartOfTrace("spans.json", end.getTraceId())
+			if err != nil {
+				log.Println(err.Error())
+			}
+			log.Println("END: " + timeToStringInSeconds(end.getStartTimeMillis()))
+			log.Println("START: " + timeToStringInSeconds(start.getStartTimeMillis()))
+			timeDiff := end.getStartTimeMillis() - start.getStartTimeMillis()
+			log.Println("TOOK: " + timeToStringInSeconds(timeDiff) + " sec")
+			log.Println("TOOK: " + timeToStringInMinutes(timeDiff) + " min")
 		}
-		log.Println("END: " + timeToStringInSeconds(end.getStartTimeMillis()))
-		log.Println("START: " + timeToStringInSeconds(start.getStartTimeMillis()))
-		timeDiff := end.getStartTimeMillis() - start.getStartTimeMillis()
-		log.Println("TOOK: " + timeToStringInSeconds(timeDiff) + " sec")
-		log.Println("TOOK: " + timeToStringInMinutes(timeDiff) + " min")
-	}
 
-	// 1624431600000, 1624464000000
-	from := "1624431600000"
-	to := "1624464000000"
-	hits2, _ := query("test", "collector-mercado-worker", "process-ctle", from, to, "desc", 10)
-	//hits, _ := query("test", "changeprocessor", "write-to-mongo", from, to, "desc", 1)
-	hitsCountAsString2 := strconv.FormatInt(int64(len(hits2)), 10)
-	log.Println("Hit Count: " + hitsCountAsString2)
-	for i := 0; i < len(hits2); i++ {
-		hit := hits2[i]
-		serviceName := hit.getServiceName()
-		operationName := hit.getOperationName()
-		startTime := hit.getStartTimeAsLocalTime()
-		log.Println("Service/Operation: " + serviceName + "/" + operationName + "(" + startTime + ")" + " ID: " + hit.Id)
-	}
+		// 1624431600000, 1624464000000
+		from := "1624431600000"
+		to := "1624464000000"
+		hits2, _ := query("test", "collector-mercado-worker", "process-ctle", from, to, "desc", 10)
+		//hits, _ := query("test", "changeprocessor", "write-to-mongo", from, to, "desc", 1)
+		hitsCountAsString2 := strconv.FormatInt(int64(len(hits2)), 10)
+		log.Println("Hit Count: " + hitsCountAsString2)
+		for i := 0; i < len(hits2); i++ {
+			hit := hits2[i]
+			serviceName := hit.getServiceName()
+			operationName := hit.getOperationName()
+			startTime := hit.getStartTimeAsLocalTime()
+			log.Println("Service/Operation: " + serviceName + "/" + operationName + "(" + startTime + ")" + " ID: " + hit.Id)
+		}
+	*/
 
 }
 
 // ElasticSearch
-var es_url = "http://localhost:9200" // via ubuntu server elastic search installation (login needed)
+// var es_url = "http://localhost:9200" // via ubuntu server elastic search installation (login needed)
+var es_url = os.Getenv("ES_DEV_JAEGER")
 
 // ElasticSearch Helper functions
 func queryAll(index string) ([]Hit, error) {
@@ -137,8 +166,8 @@ func findEndOfTraces(path string) []Hit {
 // helper//
 ///////////
 
-// Index Today
-func indexToday() {
+// Elastic Search Index for Today
+func indexToday() string {
 	now := time.Now()
 	yearAsString := strconv.Itoa(now.Year())
 	var monthAsString string
@@ -149,6 +178,41 @@ func indexToday() {
 	}
 	dayAsString := strconv.Itoa(now.Day())
 	fmt.Println("INDEX: " + "jaeger-span-" + yearAsString + "-" + monthAsString + "-" + dayAsString)
+	return dayAsString
+}
+
+func todayMidnightUnixTimeInMilliSeconds() int64 {
+	now := time.Now()
+	year := now.Year()
+	month := now.Month()
+	day := now.Day()
+
+	midnight := time.Date(year, month, day, 0, 0, 0, 0, now.Location())
+	loc, _ := time.LoadLocation("Europe/Berlin")
+	fmt.Println("TimeStamp: " + midnight.In(loc).String())
+
+	ut := midnight.UnixNano() / int64(time.Millisecond)
+	utAsString := strconv.FormatInt(int64(ut), 10)
+	fmt.Println("TimeStamp in Unix: " + utAsString)
+	return ut
+}
+
+// 25 entries to cover 23-24h also
+func todayChunks() []int64 {
+	var chunks = make([]int64, 0)
+	midnight := todayMidnightUnixTimeInMilliSeconds()
+	oneHourInMilliSeconds := 3600000
+
+	for hours := 0; hours < 25; hours++ {
+		chunks = append(chunks, int64(hours)*int64(oneHourInMilliSeconds)+midnight)
+	}
+
+	for i, chunk := range chunks {
+		index := strconv.FormatInt(int64(i), 10)
+		fmt.Println(index + "-CHUNK: " + strconv.FormatInt(int64(chunk), 10))
+	}
+
+	return chunks
 }
 
 // Body Builder for GET Requests
@@ -205,7 +269,7 @@ func createBodyWithRange(serviceName string, operationName string, from string, 
 }
 
 // RFC3339 timestamp in milliseconds (unix time) - e.g: "2021-06-14T09:58:16+02:00" => 1623657496000
-func timeStampInMilliSeconds(rfc3339t string) string {
+func timeStampInMilliSeconds(rfc3339t string) int64 {
 
 	t, err := time.Parse(time.RFC3339, rfc3339t)
 	if err != nil {
@@ -217,8 +281,10 @@ func timeStampInMilliSeconds(rfc3339t string) string {
 	fmt.Println("TimeStamp: " + t.In(loc).String())
 
 	ut := t.UnixNano() / int64(time.Millisecond)
-	utAsString := strconv.FormatInt(int64(ut), 10)
-	return utAsString
+	//utAsString := strconv.FormatInt(int64(ut), 10)
+	//return utAsString
+
+	return ut
 }
 
 func timeToStringInSeconds(milliSecs int64) string {
@@ -261,27 +327,6 @@ func findStartOfTrace(path string, traceID string) (Hit, error) {
 		startHit := starts[0]
 		return startHit, nil
 	}
-}
-
-func createSpanRecordFromJSON(path string) SpansRecord {
-
-	var spansRecord SpansRecord
-
-	jsonFile, err := os.Open(path)
-	// if we os.Open returns an error then handle it
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("Successfully Opened: " + path)
-
-	// read our opened jsonFile as a byte array and unmarshal it (convert JSON into Struct)
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &spansRecord)
-
-	// defer the closing of our jsonFile so that we can parse it later on
-	defer jsonFile.Close()
-
-	return spansRecord
 }
 
 func (spansRecord *SpansRecord) getHits() []Hit {
@@ -378,4 +423,26 @@ type Tag struct {
 	Key   string `json:"key"`
 	Type  string `json:"type"`
 	Value string `json:"value"`
+}
+
+// For Local testing only
+func createSpanRecordFromJSON(path string) SpansRecord {
+
+	var spansRecord SpansRecord
+
+	jsonFile, err := os.Open(path)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("Successfully Opened: " + path)
+
+	// read our opened jsonFile as a byte array and unmarshal it (convert JSON into Struct)
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	json.Unmarshal(byteValue, &spansRecord)
+
+	// defer the closing of our jsonFile so that we can parse it later on
+	defer jsonFile.Close()
+
+	return spansRecord
 }
