@@ -24,26 +24,24 @@ func main() {
 	// oneDayInMilliSeconds := 86400000
 
 	// START: collector-mercado-worker-v1
-
+	fmt.Println("###############################################")
 	fmt.Println("Analysing Tracing Records from ElasticSearch...")
+	fmt.Println("###############################################")
+	fmt.Println("")
 
 	// Get chunks of 1 hour from 0-24 h
 	tc := todayChunks()
-	lenAsString := strconv.FormatInt(int64(len(tc)), 10)
-	fmt.Println("TC: " + lenAsString)
-
 	index := indexToday()
+	fmt.Println("INDEX " + index)
+	fmt.Println("")
 
 	for i := 0; i < 24; i++ {
 		from := strconv.FormatInt(int64(tc[i]), 10)
 		to := strconv.FormatInt(int64(tc[i+1]-1), 10) // -1 => otherwise it will be found twice
 		hits, _ := query(index, "changeprocessor", "write-to-mongo", from, to, "desc", 1000)
-		hitsCountAsString := strconv.FormatInt(int64(len(hits)), 10)
+		count := strconv.FormatInt(int64(len(hits)), 10)
 
-		indexAsString := strconv.FormatInt(int64(i), 10)
-		log.Println("Index " + indexAsString + "-> Hit Count: " + hitsCountAsString)
-
-		fmt.Println(" --- FROM: " + timeStampInMilliSecondsToLocal(tc[i]) + "- TO :" + timeStampInMilliSecondsToLocal(tc[i+1]) + "---")
+		fmt.Println(" --- FROM: " + timeStampInMilliSecondsToLocal(tc[i]) + "- TO :" + timeStampInMilliSecondsToLocal(tc[i+1]) + " -> FOUND: " + count + " ---")
 		for i := 0; i < len(hits); i++ {
 			end := hits[i]
 			start, err := queryStart(index, "collector-mercado-worker-v1", "process-ctle", end.getTraceId())
@@ -54,6 +52,7 @@ func main() {
 				log.Println("TOOK: " + timeToStringInSeconds(timeDiff) + " sec " + "(" + timeToStringInMinutes(timeDiff) + " min" + ")")
 			}
 		}
+		fmt.Println("")
 	}
 
 	/*
