@@ -24,6 +24,8 @@ func main() {
 	// Constants
 	// oneDayInMilliSeconds := 86400000
 
+	// START: collector-mercado-worker-v1
+
 	fmt.Println("Analysing Tracing Records from ElasticSearch...")
 
 	// Get chunks of 1 hour from 0-24 h
@@ -45,8 +47,6 @@ func main() {
 
 	// Getting Entries of an Index
 	fmt.Println("Hits from today...")
-
-	indexToday()
 
 	/*
 		hits, _ := queryAll("test")
@@ -94,12 +94,17 @@ func main() {
 
 // ElasticSearch
 // var es_url = "http://localhost:9200" // via ubuntu server elastic search installation (login needed)
-var es_url = os.Getenv("ES_DEV_JAEGER")
+
+func getElasticSearchURL() string {
+	var es_url = os.Getenv("ES_DEV_JAEGER")
+	fmt.Println("ES_URL: " + es_url)
+	return es_url
+}
 
 // ElasticSearch Helper functions
 func queryAll(index string) ([]Hit, error) {
 
-	query := es_url + "/" + index + "/_search?size=10000"
+	query := getElasticSearchURL() + "/" + index + "/_search?size=10000"
 
 	req, err := http.NewRequest("GET", query, nil)
 	req.Header.Set("Content-Type", "application/json")
@@ -124,7 +129,7 @@ func queryAll(index string) ([]Hit, error) {
 
 func query(index string, serviceName string, operationName string, from string, to string, sort string, size int) ([]Hit, error) {
 
-	query := es_url + "/" + index + "/_search"
+	query := getElasticSearchURL() + "/" + index + "/_search"
 
 	bodyString := createBodyWithRange(serviceName, operationName, from, to, sort, size)
 	var body = []byte(bodyString)
@@ -178,8 +183,9 @@ func indexToday() string {
 		monthAsString = strconv.Itoa(int(now.Month()))
 	}
 	dayAsString := strconv.Itoa(now.Day())
-	fmt.Println("INDEX: " + "jaeger-span-" + yearAsString + "-" + monthAsString + "-" + dayAsString)
-	return dayAsString
+	indexToday := "jaeger-span-" + yearAsString + "-" + monthAsString + "-" + dayAsString
+	fmt.Println("INDEX: " + indexToday)
+	return indexToday
 }
 
 func todayMidnightUnixTimeInMilliSeconds() int64 {
