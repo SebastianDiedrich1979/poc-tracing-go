@@ -32,9 +32,10 @@ func main() {
 	fmt.Println("TC: " + lenAsString)
 
 	for i := 0; i < 24; i++ {
+		index := indexToday()
 		from := strconv.FormatInt(int64(tc[i]), 10)
 		to := strconv.FormatInt(int64(tc[i+1]-1), 10) // -1 => otherwise it will be found twice
-		hits, _ := query("test", "changeprocessor", "write-to-mongo", from, to, "desc", 1000)
+		hits, _ := query(index, "changeprocessor", "write-to-mongo", from, to, "desc", 1000)
 		//hits, _ := query("test", "eventprocessor", "rpr-created", from, to, "desc", 1000)
 		hitsCountAsString := strconv.FormatInt(int64(len(hits)), 10)
 
