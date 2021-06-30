@@ -75,7 +75,7 @@ func getElasticSearchURL() string {
 	var es_url = os.Getenv("ES_DEV_JAEGER")
 	// fmt.Println("ES_URL: " + es_url)
 
-	es_url = "http://localhost:9200"
+	//es_url = "http://localhost:9200"
 	return es_url
 }
 
