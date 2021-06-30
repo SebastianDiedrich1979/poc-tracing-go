@@ -43,7 +43,7 @@ func main() {
 		indexAsString := strconv.FormatInt(int64(i), 10)
 		log.Println("Index " + indexAsString + "-> Hit Count: " + hitsCountAsString)
 
-		fmt.Println(" --- FROM: " + timeStampInMilliSecondsToLocal(tc[i]) + "- TO:" + timeStampInMilliSecondsToLocal(tc[i+1]) + "---")
+		fmt.Println(" --- FROM: " + timeStampInMilliSecondsToLocal(tc[i]) + "- TO :" + timeStampInMilliSecondsToLocal(tc[i+1]) + "---")
 		for i := 0; i < len(hits); i++ {
 			end := hits[i]
 			start, err := queryStart(index, "collector-mercado-worker", "process-ctle", end.getTraceId())
