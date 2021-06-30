@@ -46,15 +46,13 @@ func main() {
 		fmt.Println(" --- FROM: " + timeStampInMilliSecondsToLocal(tc[i]) + "- TO :" + timeStampInMilliSecondsToLocal(tc[i+1]) + "---")
 		for i := 0; i < len(hits); i++ {
 			end := hits[i]
-			start, err := queryStart(index, "collector-mercado-worker", "process-ctle", end.getTraceId())
+			start, err := queryStart(index, "collector-mercado-worker-v1", "process-ctle", end.getTraceId())
 			if err != nil {
 				log.Println("ERROR: " + err.Error())
+			} else {
+				timeDiff := end.getStartTimeMillis() - start.getStartTimeMillis()
+				log.Println("TOOK: " + timeToStringInSeconds(timeDiff) + " sec " + "(" + timeToStringInMinutes(timeDiff) + " min" + ")")
 			}
-			// endTime := timeToStringInSeconds(end.getStartTimeMillis())
-			// startTime := timeToStringInSeconds(start.getStartTimeMillis())
-			timeDiff := end.getStartTimeMillis() - start.getStartTimeMillis()
-			// log.Println("END: " + endTime + " ,START: " + startTime)
-			log.Println("TOOK: " + timeToStringInSeconds(timeDiff) + " sec " + "(" + timeToStringInMinutes(timeDiff) + " min" + ")")
 		}
 	}
 
