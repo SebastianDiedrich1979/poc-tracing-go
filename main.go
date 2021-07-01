@@ -14,8 +14,8 @@ import (
 
 /*
 Duration from CTLE - XML (Change is written to Feed)
-START: "process-ctle" (Service: collector-mercado-worker)
-END: "write-to-mongo" (Service: changeprocessor)
+START: "process-ctle" (Service: collector-mercado-worker-v1)
+END:   "write-to-mongo" (Service: changeprocessor)
 */
 
 func main() {
@@ -59,15 +59,6 @@ func main() {
 		}
 		fmt.Println("")
 	}
-
-	/*
-		hits, _ := queryAll("test")
-		hitsCountAsString := strconv.FormatInt(int64(len(hits)), 10)
-		log.Println("Hits found: " + hitsCountAsString)
-		for _, hit := range hits {
-			log.Println("HIT: " + hit.getOperationName() + ", Service: " + hit.getServiceName() + "(" + hit.getStartTimeAsLocalTime() + ")")
-		}
-	*/
 }
 
 // ElasticSearch
@@ -75,9 +66,6 @@ func main() {
 
 func getElasticSearchURL() string {
 	var es_url = os.Getenv("ES_URL_JAEGER")
-	// fmt.Println("ES_URL: " + es_url)
-
-	//es_url = "http://localhost:9200"
 	return es_url
 }
 
@@ -236,13 +224,6 @@ func todayChunks() []int64 {
 	for hours := 0; hours < 25; hours++ {
 		chunks = append(chunks, int64(hours)*int64(oneHourInMilliSeconds)+midnight)
 	}
-
-	/*
-		for i, chunk := range chunks {
-			index := strconv.FormatInt(int64(i), 10)
-			fmt.Println(index + "-CHUNK: " + strconv.FormatInt(int64(chunk), 10))
-		}
-	*/
 
 	return chunks
 }
