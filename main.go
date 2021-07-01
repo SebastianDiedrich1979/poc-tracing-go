@@ -24,6 +24,7 @@ func main() {
 	// oneDayInMilliSeconds := 86400000
 
 	// START: collector-mercado-worker-v1
+	fmt.Println("")
 	fmt.Println("###############################################")
 	fmt.Println("Analysing Tracing Records from ElasticSearch...")
 	fmt.Println("###############################################")
@@ -35,6 +36,7 @@ func main() {
 	fmt.Println("INDEX " + index)
 	fmt.Println("")
 
+	// Calculate for each chunk the 'processing time' from CTLE to XML
 	for i := 0; i < 24; i++ {
 		from := strconv.FormatInt(int64(tc[i]), 10)
 		to := strconv.FormatInt(int64(tc[i+1]-1), 10) // -1 => otherwise it will be found twice
@@ -72,7 +74,7 @@ func main() {
 // var es_url = "http://localhost:9200" // via ubuntu server elastic search installation (login needed)
 
 func getElasticSearchURL() string {
-	var es_url = os.Getenv("ES_DEV_JAEGER")
+	var es_url = os.Getenv("ES_URL_JAEGER")
 	// fmt.Println("ES_URL: " + es_url)
 
 	//es_url = "http://localhost:9200"
@@ -194,7 +196,13 @@ func indexToday() string {
 	} else {
 		monthAsString = strconv.Itoa(int(now.Month()))
 	}
-	dayAsString := strconv.Itoa(now.Day())
+	var dayAsString string
+	if now.Day() < 10 {
+		dayAsString = "0" + strconv.Itoa(now.Day())
+	} else {
+		dayAsString = strconv.Itoa(now.Day())
+	}
+
 	indexToday := "jaeger-span-" + yearAsString + "-" + monthAsString + "-" + dayAsString
 	// fmt.Println("INDEX: " + indexToday)
 
